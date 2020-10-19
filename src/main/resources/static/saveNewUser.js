@@ -4,7 +4,6 @@ function saveNewUser() {
     let select = document.getElementById("roles");
     let selected = [];
     for (let i = 0; i < select.options.length; i++) {
-        let role = select.options[i];
         if (select.options[i].selected) {
             selected.push(select.options[i].text);
         }
@@ -21,6 +20,13 @@ function saveNewUser() {
             'Content-Type': 'application/json'
         }
     }).then(response => console.log(response))
-        .then(switchToUsersTable)
-        .then(() => setTimeout(showAllUsers, 10));
+        .then(() => setTimeout(showAllUsers, 50))
+        .then(() => cleanNewUserTable());
+}
+
+function cleanNewUserTable() {
+    let data = document.forms.namedItem("newUserForm");
+    data.elements.namedItem("newName").value = "";
+    data.elements.namedItem("newAge").value = "";
+    data.elements.namedItem("password").value = "";
 }

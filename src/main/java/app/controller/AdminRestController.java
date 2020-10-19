@@ -6,6 +6,7 @@ import app.service.RoleBootService;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,6 +65,10 @@ public class AdminRestController {
     public ResponseEntity<User> saveNewUser(@RequestBody Map<String, Object> payload){
         User user = new User();
         fillUser(payload, user);
+        UserDetails byUsername = userService.loadUserByUsername(user.getUsername());
+        if (byUsername != null) {
+            return ResponseEntity.unprocessableEntity().body(user);
+        }
         userService.save(user);
         return ResponseEntity.ok(user);
     }
